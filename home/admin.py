@@ -4,7 +4,7 @@ from .models import *
 
 
 class SalaAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'capacidade', 'status', 'tipo')
+	list_display = ('nome', 'capacidade', 'status', 'tipo')
 
 class TipoSalaAdmin(admin.ModelAdmin):
     list_display = ('tipo',)
@@ -13,10 +13,10 @@ class CondicaoAdmin(admin.ModelAdmin):
     list_display = ('condicao',)
 
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'email', 'telefone', 'contato')
+    list_display = ('nome', 'email','inscricaoestadual')
 
 class ContatoAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'email', 'telefone1', 'celular')
+    list_display = ('ddd','telefone','tipo')
 
 class ServicoAdmin(admin.ModelAdmin):
     list_display = ('tiposervico',)
