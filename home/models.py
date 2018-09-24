@@ -39,8 +39,8 @@ class Pedido (models.Model):
 	datapedido = models.DateTimeField()
 	dataagenda = models.DateTimeField()
 	
-	cliente = models.ForeignKey(Cliente,null = True, blank=False, on_delete = models.CASCADE)	
-	sala = models.ForeignKey(Sala,null = True, blank=False, on_delete = models.CASCADE)	
+	cliente = models.ForeignKey(Cliente,null = True, blank=False,  on_delete=models.CASCADE)	
+	sala = models.ForeignKey(Sala,null = True, blank=False, on_delete=models.CASCADE)	
 	
 	def __str__(self):
 		return self.status		
@@ -51,8 +51,8 @@ class Agenda (models.Model):
 	dataSaida = models.DateTimeField()
 	status = models.IntegerField()
 	
-	pedido = models.ForeignKey(Pedido,null = True, blank=False, on_delete = models.CASCADE)
-	sala = models.ForeignKey(Sala,null = True, blank=False, on_delete = models.CASCADE)
+	pedido = models.ForeignKey(Pedido,null = True, blank=False, on_delete=models.CASCADE)
+	sala = models.ForeignKey(Sala,null = True, blank=False, on_delete=models.CASCADE)
 	
 	def __str__(self):
 		return self.dataEntrada
@@ -105,5 +105,90 @@ class Servicos(models.Model):
     tiposervico = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.tiposervico	
+        return self.tiposervico
 		
+class Perfil(models.Model):
+    perfil = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.Pefil
+		
+class Pagamento (models.Model):
+	datapagamento = models.DateTimeField()
+	valor = models.FloatField()
+	formaPagamento = models.CharField(max_length = 100)
+	status = models.CharField()
+	
+	cliente = models.ForeignKey(Cliente, blank=False,null = False,  on_delete=models.CASCADE)
+	pedido = models.ForeignKey(Pedido, blank=False, null = False,  on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.status
+		
+class Usuario (models.Model):
+	nome = models.CharField(max_length = 100)
+	login = models.CharField(max_length = 50)
+	
+	perfil = models.ForeignKey(Perfil, blank= False, null = False,  on_delete=models.CASCADE )
+	
+	def __str__(self):
+		return self.nome
+
+class Reserva(models.Model):
+	entrada = models.DateTimeField()
+	saida = models.DateTimeField()
+	descricaoReserva = models.CharField(max_length = None, null = True)
+
+	pedido = models.ForeignKey(Pedido, blank=True,null = False,  on_delete=models.CASCADE)
+	
+	def __str__(self):
+		return self.entrada
+		
+class Boleto(models.Model):
+	vencimento = models.DateTimeField()
+	valor = models.FloatField()
+	taxa = models.FloatField()
+	codigobarra = models.CharField(max_length=None)
+	
+	cliente = models.ForeignKey(Cliente, blank=False, null = False,  on_delete=models.CASCADE)
+		
+	def __str__(self):
+		return self.vencimento
+class Item (models.Model):
+	nome = models.CharField(max_length = None)
+	valor = models.FloatField()
+	
+	def __str__(self):
+		return self.nome
+class Evento(models.Model):
+	titulo = models.CharField(max_length = None)
+	tipo = models.CharField(max_length = None)
+	
+	reserva = models.ForeignKey(Reserva, blank = False, null = True,  on_delete=models.CASCADE)
+	
+	def __str__(self):
+		return self.titulo
+
+		
+class ItensEvento(models.Model):
+	item = models.ForeignKey(Item, blank= False, on_delete=models.CASCADE)
+	evento = models.ForeignKey(Evento, blank = False, on_delete=models.CASCADE)
+	
+	def __str__(self):
+		return [self.item,self.evento]
+	
+class Arquivo(models.Model):
+	local = models.CharField(max_length = None)
+	titulo = models.CharField(max_length = 30)
+	formato = models.CharField(max_length = 10)	
+	
+	evento = models.ForeignKey(Evento, blank = None,null = False,  on_delete=models.CASCADE)
+	
+	def __str__(self):
+		return self.titulo
+		
+class Orcamento(models.Model):
+	valor = models.FloatField()
+	datageracao = models.DateTimeField()
+	
+	pedido = models.ForeignKey(Pedido,blank = False, null = False,  on_delete=models.CASCADE)
